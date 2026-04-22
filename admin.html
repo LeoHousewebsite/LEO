@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leo House | Admin Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container { max-width: 900px; margin: 4rem auto; }
+        .admin-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; }
+        .admin-tabs button {
+            background: none; border: none; color: var(--text-muted); font-size: 1.1rem;
+            cursor: pointer; font-weight: 600; transition: var(--transition);
+        }
+        .admin-tabs button.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
+        .admin-section { display: none; }
+        .admin-section.active { display: block; animation: fadeInUp 0.4s ease forwards; }
+
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-muted); }
+        input, select, textarea {
+            width: 100%; padding: 1rem; border-radius: 8px;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+            color: white; font-family: 'Outfit', sans-serif;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--gold); outline: none; }
+        textarea { resize: vertical; min-height: 120px; }
+        
+        .btn {
+            background: var(--gold); color: black; padding: 1rem 2rem; border: none;
+            border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; font-size: 1rem;
+        }
+        .btn:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 5px 15px var(--gold-glow); }
+        .btn-secondary { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 1rem 2rem; border-radius: 8px; cursor: pointer; font-weight: 800; text-transform: uppercase; }
+        .btn-secondary:hover { background: rgba(255,215,0,0.1); }
+        .btn-danger { background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-danger:hover { background: #c0392b; }
+
+        .data-list { margin-top: 2rem; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 1rem; }
+        .data-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; border-bottom: 1px solid var(--border-color); }
+        .data-item:last-child { border-bottom: none; }
+        
+        .export-box { text-align: center; margin-top: 4rem; padding: 3rem; background: var(--bg-card); border-radius: 15px; border: 1px solid var(--gold); }
+        .export-box h2 { color: var(--gold); margin-bottom: 1rem; }
+        
+        /* LOGIN Modal */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark); z-index: 999; display: flex; 
+            align-items: center; justify-content: center; flex-direction: column;
+        }
+        .login-box {
+            background: var(--bg-card); padding: 3rem; border-radius: 15px; 
+            border: 1px solid var(--border-color); text-align: center; max-width: 400px;
+        }
+        .login-box h2 { color: var(--gold); margin-bottom: 1rem; }
+        
+        #main-admin { display: none; } /* Hidden until auth */
+
+        /* CROPPER Modal */
+        #crop-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 1000; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+        .crop-container { width: 90%; max-width: 500px; height: 400px; background: #fff; margin-bottom: 1rem; }
+        .crop-controls { display: flex; gap: 1rem; }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen">
+        <div class="login-box glass-card">
+            <h2>Admin Login</h2>
+            <p style="color:var(--text-muted); margin-bottom: 2rem;">Authorized Personnel Only</p>
+            <input type="password" id="adminPassword" placeholder="Enter Password" style="margin-bottom: 1.5rem;" autocomplete="off">
+            <button id="loginBtn" class="btn" style="width:100%;">Access Dashboard</button>
+            <p id="loginError" style="color:#e74c3c; margin-top:1rem; display:none;">Incorrect Password</p>
+            <a href="index.html" style="color:var(--text-muted); display:inline-block; margin-top:1.5rem; text-decoration:none;">&larr; Back to Home</a>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="main-admin">
+        <nav class="navbar">
+            <div class="logo"><span class="gold-text">LEO</span> ADMIN</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Back to Website</a></li>
+            </ul>
+        </nav>
+
+        <main class="admin-container">
+        <div class="admin-tabs">
+            <button class="tab-btn active" data-target="admin-leaderboard">Log Results</button>
+            <button class="tab-btn" data-target="admin-news">Post News</button>
+            <button class="tab-btn" data-target="admin-members">Manage Members</button>
+            <button class="tab-btn" data-target="admin-profiles">Home Profiles</button>
+            <button class="tab-btn" data-target="admin-export">Export Data</button>
+        </div>
+
+        <!-- 1. LEADERBOARD -->
+        <section id="admin-leaderboard" class="admin-section active">
+            <h2>Log an Event Result</h2>
+            <p style="color:var(--text-muted); margin-bottom:2rem;">Points will automatically be calculated.</p>
+            
+            <form id="leaderboardForm" class="glass-card">
+                <div class="form-group">
+                    <label>Student Name</label>
+                    <input type="text" id="lbName" list="studentNames" placeholder="Type to search..." required autocomplete="off">
+                    <datalist id="studentNames">
+                        <!-- Populated by JS -->
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label>Event Name</label>
+                    <input type="text" id="lbEvent" placeholder="e.g. 100m Sprint" required>
+                </div>
+                <div class="form-group">
+                    <label>Position Achieved</label>
+                    <select id="lbPosition" required>
+                        <option value="1st">1st Place</option>
+                        <option value="2nd">2nd Place</option>
+                        <option value="3rd">3rd Place</option>
+                        <option value="Participation">Participation</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Log Result</button>
+            </form>
+            <div class="data-list" id="lbList"></div>
+        </section>
+
+        <!-- 2. NEWS -->
+        <section id="admin-news" class="admin-section">
+            <h2>Post a News Update</h2>
+            <form id="newsForm" class="glass-card mt-4">
+                <div class="form-group">
+                    <label>News Title</label>
+                    <input type="text" id="newsTitle" placeholder="e.g. Debate Finals Upcoming!" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="newsDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="newsDesc" placeholder="Enter news details..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Photo URL / File Path (Optional)</label>
+                    <input type="text" id="newsImage" placeholder="e.g. images/profile_male.png">
+                </div>
+                <button type="submit" class="btn">Post News</button>
+            </form>
+            <div class="data-list" id="newsList"></div>
+        </section>
+
+        <!-- 3. MEMBERS -->
+        <section id="admin-members" class="admin-section">
+            <h2>Add New Member</h2>
+            <form id="memberForm" class="glass-card mt-4">
+                <div class="form-group">
+                    <label>Student Name</label>
+                    <input type="text" id="memName" required>
+                </div>
+                <div class="form-group">
+                    <label>Grade / Class</label>
+                    <input type="text" id="memClass" placeholder="e.g. Grade 12" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="memRole" required>
+                        <option value="member">Normal Member</option>
+                        <option value="leo_council">Leo Council (Gold)</option>
+                        <option value="other_council">Other Council (Orange)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Add Member</button>
+            </form>
+            <div class="data-list" id="memberList"></div>
+        </section>
+
+        <!-- 4. HOME PROFILES (Photos) -->
+        <section id="admin-profiles" class="admin-section">
+            <h2>Update Profile Photos</h2>
+            <p style="color:var(--text-muted); margin-bottom:2rem;">Upload new photos for the Teachers in Charge and the House Council. (Images are compressed directly into your database automatically!).</p>
+            
+            <h3 style="color:var(--gold); margin-bottom:1rem; border-bottom:1px solid #333; padding-bottom:0.5rem;">Teachers</h3>
+            <div class="data-list" id="teachersProfileList" style="margin-top:0;"></div>
+            
+            <h3 style="color:var(--gold); margin-top:2rem; margin-bottom:1rem; border-bottom:1px solid #333; padding-bottom:0.5rem;">House Council</h3>
+            <div class="data-list" id="councilProfileList" style="margin-top:0;"></div>
+        </section>
+
+        <!-- 5. EXPORT -->
+        <section id="admin-export" class="admin-section">
+            <div class="export-box">
+                <h2>Save Your Changes</h2>
+                <div style="background: rgba(255,0,0,0.1); padding: 1rem; border-left: 4px solid red; text-align:left; margin-bottom:2rem;">
+                    <strong>CRITICAL INSTRUCTION:</strong> Because your site isn't connected to a database, downloading the file will place it in your <code>Downloads</code> folder, which is why your site isn't updating! 
+                    Instead of downloading, use the <strong>COPY CODE</strong> button below, open your actual <code>data.js</code> file in your code editor, Select All (Cmd+A), and Paste (Cmd+V).
+                </div>
+                <button id="copyBtn" class="btn">1. Copy Code To Clipboard</button>
+                <button id="downloadBtn" class="btn-secondary" style="margin-left:1rem;">2. Download data.js (Alternative)</button>
+            </div>
+        </section>
+
+        <!-- Subtle Watermark -->
+        <div style="text-align: center; padding: 2rem; font-size: 0.75rem; color: #333;">
+            Made by Ryan Abraham
+        </div>
+    </main>
+    </div> <!-- End main-admin -->
+
+    <!-- CROP MODAL -->
+    <div id="crop-modal">
+        <div class="crop-container">
+            <img id="imageToCrop" style="max-width: 100%; display: block;">
+        </div>
+        <div class="crop-controls">
+            <button id="cancelCropBtn" class="btn-secondary" style="background:#334; border:none; color:white;">Cancel</button>
+            <button id="applyCropBtn" class="btn">Crop & Apply Photo</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="data.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

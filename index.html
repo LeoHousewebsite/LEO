@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leo House | Dare To Do The Right</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header / Nav -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="gold-text">LEO</span> HOUSE
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active" data-target="home">Home</a></li>
+            <li><a href="#" data-target="leaderboard">Leaderboard</a></li>
+            <li><a href="#" data-target="members">Members</a></li>
+            <li><a href="#" data-target="news">News</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="bounce-in">Courage, Strength, Pride</h1>
+            <p class="quote fade-in">"Dare to do the right"</p>
+        </div>
+    </header>
+
+    <!-- MAIN SECTIONS -->
+    <main class="container">
+        
+        <!-- SECTION 1: HOME (COUNCIL & TEACHERS) -->
+        <section id="home" class="section active fade-in-up">
+            <h2 class="section-title">Teachers In Charge</h2>
+            <div id="teachersGrid" class="grid-2">
+                <!-- Injected via JS -->
+            </div>
+
+            <h2 class="section-title mt-4">House Council</h2>
+            <div id="councilGrid" class="grid-4">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: LEADERBOARD -->
+        <section id="leaderboard" class="section fade-in-up">
+            <h2 class="section-title">Student Leaderboard</h2>
+            <p class="section-subtitle">Points System: 1st Place (4 pts), 2nd Place (3 pts), 3rd Place (2 pts), Participation (1 pt)</p>
+            
+            <div class="leaderboard-container glass-card">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Student</th>
+                            <th>Total Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="mt-4" style="text-align: center;">Recent Achievements</h3>
+            <div id="achievementsList" class="achievements-list">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: MEMBERS -->
+        <section id="members" class="section fade-in-up">
+            <h2 class="section-title">Leo House Members</h2>
+            <p class="section-subtitle">
+                <span class="badge badge-gold">Leo House Council</span>
+                <span class="badge badge-orange">Other Council</span>
+                <span class="badge">Member</span>
+            </p>
+            <div id="membersContainer" class="members-container">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 4: NEWS -->
+        <section id="news" class="section fade-in-up">
+            <h2 class="section-title">News & Upcoming Events</h2>
+            <div id="newsGrid" class="grid-3">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Leo House. "Dare to do the right." Hosted & Designed for excellence.</p>
+        <p><small>To edit content, securely update the database via the <a href="admin.html" style="color: var(--gold); text-decoration: none;">Admin Dashboard</a>.</small></p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
