@@ -135,7 +135,7 @@ const LEO_DATA = {
                 },
                 {
                     "name": "Halle Berry",
-                    "role": "other_council"
+                    "role": "council"
                 }
             ]
         },
@@ -173,7 +173,7 @@ const LEO_DATA = {
                 },
                 {
                     "name": "Zendaya Coleman",
-                    "role": "other_council"
+                    "role": "council"
                 },
                 {
                     "name": "Tom Holland",
@@ -198,7 +198,7 @@ const LEO_DATA = {
                 },
                 {
                     "name": "Evanna Lynch",
-                    "role": "other_council"
+                    "role": "council"
                 }
             ]
         }

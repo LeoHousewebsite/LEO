@@ -8,6 +8,7 @@
     --gold: #FFD700;
     --gold-glow: rgba(255, 215, 0, 0.4);
     --orange: #FF8C00;
+    --bronze: #CD7F32;
     --border-color: #333842;
     --transition: 0.3s ease-in-out;
 }
@@ -159,10 +160,12 @@ h1, h2, h3 {  font-weight: 800; }
 }
 .student-pill:hover { filter: brightness(1.2); }
 .student-pill.leo_council { border-color: var(--gold); background: rgba(255,215,0,0.1); color: var(--gold); }
-.student-pill.other_council { border-color: var(--orange); background: rgba(255,140,0,0.1); color: var(--orange); }
+.student-pill.council { border-color: white; background: rgba(255,255,255,0.1); color: white; }
+.student-pill.class_rep { border-color: var(--orange); background: rgba(255,140,0,0.1); color: var(--orange); }
 
 .badge { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: var(--bg-card); border: 1px solid var(--border-color); margin: 0 0.5rem; }
 .badge-gold { background: rgba(255,215,0,0.1); border-color: var(--gold); color: var(--gold); }
+.badge-white { background: rgba(255,255,255,0.1); border-color: white; color: white; }
 .badge-orange { background: rgba(255,140,0,0.1); border-color: var(--orange); color: var(--orange); }
 
 /* ====== FOOTER ====== */

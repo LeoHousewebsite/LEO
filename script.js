@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <h3>${t.name}</h3>
                 <div class="role">${t.role}</div>
-                <div class="meta">Class: ${t.class} <br> Phone: ${t.phone}</div>
+                <div class="meta">Class: ${t.class}</div>
             </div>
         `).join('');
     }

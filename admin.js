@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 membersHTML += `<div class="data-item">
                     <div>
                         <span>${s.name}</span>
-                        <span style="color:${s.role === 'leo_council' ? 'gold' : s.role==='other_council' ? 'orange' : '#aaa'}; font-size:0.8rem; margin-left:1rem;">[${s.role.replace('_', ' ').toUpperCase()}]</span>
+                        <span style="color:${s.role === 'leo_council' ? 'gold' : s.role==='council' ? 'white' : s.role==='class_rep' ? 'orange' : '#aaa'}; font-size:0.8rem; margin-left:1rem;">[${s.role.replace('_', ' ').toUpperCase()}]</span>
                     </div>
                     <button class="btn-danger" onclick="deleteMember(${classIndex}, ${studentIndex})">Delete</button>
                 </div>`;
