@@ -54,11 +54,16 @@
 
         <!-- SECTION 2: LEADERBOARD -->
         <section id="leaderboard" class="section fade-in-up">
-            <h2 class="section-title">Student Leaderboard</h2>
+            <h2 class="section-title">Leaderboard</h2>
             <p class="section-subtitle">Points System: 1st Place (4 pts), 2nd Place (3 pts), 3rd Place (2 pts), Participation (1 pt)</p>
             
+            <div class="lb-tabs">
+                <button class="lb-tab-btn active" data-target="student-lb-table">Students</button>
+                <button class="lb-tab-btn" data-target="class-lb-table">Classes</button>
+            </div>
+
             <div class="leaderboard-container glass-card">
-                <table class="leaderboard-table">
+                <table class="leaderboard-table" id="student-lb-table">
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -70,7 +75,22 @@
                         <!-- Injected via JS -->
                     </tbody>
                 </table>
+
+                <table class="leaderboard-table" id="class-lb-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Class & Section</th>
+                            <th>Total Points</th>
+                        </tr>
+                    </thead>
+                    <tbody id="classLeaderboardBody">
+                        <!-- Injected via JS -->
+                    </tbody>
+                </table>
             </div>
+
+
 
             <h3 class="mt-4" style="text-align: center;">Recent Achievements</h3>
             <div id="achievementsList" class="achievements-list">

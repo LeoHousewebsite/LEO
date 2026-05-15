@@ -27,6 +27,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- Leaderboard Tabs Logic ---
+    const lbTabs = document.querySelectorAll('.lb-tab-btn');
+    const lbTables = document.querySelectorAll('.leaderboard-table');
+
+    lbTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            lbTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            const targetId = tab.getAttribute('data-target');
+            lbTables.forEach(table => {
+                if(table.id === targetId) {
+                    table.style.display = 'table';
+                } else {
+                    table.style.display = 'none';
+                }
+            });
+        });
+    });
+
     function renderPage() {
         // --- Populate Home: Teachers ---
         const teachersGrid = document.getElementById('teachersGrid');
@@ -38,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <h3>${t.name}</h3>
                     <div class="role">${t.role}</div>
-                    <div class="meta">Class: ${t.class}</div>
+                    <div class="meta">${t.class ? 'Class: ' + t.class : ''}</div>
                 </div>
             `).join('');
         }
@@ -53,21 +73,48 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <h3>${c.name}</h3>
                     <div class="role">${c.position}</div>
-                    <div class="meta">Grade ${c.grade}</div>
+                    <div class="meta">${c.grade ? 'Grade ' + c.grade : ''}</div>
                 </div>
             `).join('');
         }
 
         // --- Process & Populate Leaderboard ---
         const leaderboardBody = document.getElementById('leaderboardBody');
+        const classLeaderboardBody = document.getElementById('classLeaderboardBody');
         const achievementsList = document.getElementById('achievementsList');
         
         if (leaderboardBody && achievementsList && LEO_DATA.achievements) {
+            // Build student-to-class lookup map for backward compatibility
+            const studentToClassMap = {};
+            if(LEO_DATA.studentsByClass) {
+                LEO_DATA.studentsByClass.forEach(cls => {
+                    cls.students.forEach(s => {
+                        studentToClassMap[s.name] = cls.className;
+                    });
+                });
+            }
+
             // Calculate points
             const pointsMap = {};
+            const classPointsMap = {};
+
             LEO_DATA.achievements.forEach(ach => {
-                if(!pointsMap[ach.student]) pointsMap[ach.student] = 0;
-                pointsMap[ach.student] += ach.points;
+                // Student Points
+                if(ach.student && ach.student !== "Class Point") {
+                    if(!pointsMap[ach.student]) pointsMap[ach.student] = 0;
+                    pointsMap[ach.student] += ach.points;
+                }
+
+                // Class Points
+                let classGroup = ach.classSection;
+                if (!classGroup && ach.student && ach.student !== "Class Point") {
+                    classGroup = studentToClassMap[ach.student] || "Unknown Class";
+                }
+                
+                if (classGroup) {
+                    if(!classPointsMap[classGroup]) classPointsMap[classGroup] = 0;
+                    classPointsMap[classGroup] += ach.points;
+                }
             });
 
             // Convert to array and sort
@@ -75,7 +122,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 .map(name => ({ name, points: pointsMap[name] }))
                 .sort((a, b) => b.points - a.points);
 
-            // Render Table
+            const sortedClasses = Object.keys(classPointsMap)
+                .map(name => ({ name, points: classPointsMap[name] }))
+                .sort((a, b) => b.points - a.points);
+
+            // Render Student Table
             leaderboardBody.innerHTML = sortedStudents.map((s, index) => {
                 const rankClass = index < 3 ? `rank-${index + 1}` : '';
                 return `
@@ -87,15 +138,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }).join('');
 
+            // Render Class Table
+            if(classLeaderboardBody) {
+                classLeaderboardBody.innerHTML = sortedClasses.map((c, index) => {
+                    const rankClass = index < 3 ? `rank-${index + 1}` : '';
+                    return `
+                        <tr>
+                            <td><span class="rank-badge ${rankClass}">${index + 1}</span></td>
+                            <td style="font-weight: 600;">${c.name}</td>
+                            <td class="gold-text"><b>${c.points}</b> pts</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
             // Render Recent Achievements
             achievementsList.innerHTML = LEO_DATA.achievements.map(ach => `
                 <div class="achievement-row">
                     <div>
-                        <h4 style="margin-bottom:0.2rem">${ach.student}</h4>
-                        <small class="text-muted">${ach.event}</small>
+                        <h4 style="margin-bottom:0.2rem">${ach.student !== "Class Point" ? ach.student : "Class: " + ach.classSection}</h4>
+                        <small class="text-muted">${ach.event} ${ach.classSection ? `(${ach.classSection})` : ''}</small>
                     </div>
                     <div>
-                        <span class="badge badge-gold">${ach.position}</span>
+                        ${ach.position ? `<span class="badge badge-gold">${ach.position}</span>` : ''}
                         <strong class="gold-text">+${ach.points}</strong>
                     </div>
                 </div>

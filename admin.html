@@ -100,7 +100,7 @@
             <button class="tab-btn" data-target="admin-news">Post News</button>
             <button class="tab-btn" data-target="admin-members">Manage Members</button>
             <button class="tab-btn" data-target="admin-profiles">Home Profiles</button>
-            <button class="tab-btn" data-target="admin-export">Cloud Sync</button>
+            <button class="tab-btn" data-target="admin-export">Data & Export</button>
         </div>
 
         <!-- 1. LEADERBOARD -->
@@ -110,24 +110,23 @@
             
             <form id="leaderboardForm" class="glass-card">
                 <div class="form-group">
-                    <label>Student Name</label>
-                    <input type="text" id="lbName" list="studentNames" placeholder="Type to search..." required autocomplete="off">
+                    <label>Student Name (Optional)</label>
+                    <input type="text" id="lbName" list="studentNames" placeholder="Type to search..." autocomplete="off">
                     <datalist id="studentNames">
                         <!-- Populated by JS -->
                     </datalist>
+                </div>
+                <div class="form-group">
+                    <label>Class & Section</label>
+                    <input type="text" id="lbClass" placeholder="e.g. 10A" required>
                 </div>
                 <div class="form-group">
                     <label>Event Name</label>
                     <input type="text" id="lbEvent" placeholder="e.g. 100m Sprint" required>
                 </div>
                 <div class="form-group">
-                    <label>Position Achieved</label>
-                    <select id="lbPosition" required>
-                        <option value="1st">1st Place</option>
-                        <option value="2nd">2nd Place</option>
-                        <option value="3rd">3rd Place</option>
-                        <option value="Participation">Participation</option>
-                    </select>
+                    <label>Points Awarded</label>
+                    <input type="number" id="lbPoints" placeholder="e.g. 10" required>
                 </div>
                 <button type="submit" class="btn">Log Result</button>
             </form>
@@ -187,22 +186,30 @@
 
         <!-- 4. HOME PROFILES (Photos) -->
         <section id="admin-profiles" class="admin-section">
-            <h2>Update Profile Photos</h2>
-            <p style="color:var(--text-muted); margin-bottom:2rem;">Upload new photos for the Teachers in Charge and the House Council. (Images are compressed directly into your database automatically!).</p>
+            <h2>Manage Home Profiles</h2>
+            <p style="color:var(--text-muted); margin-bottom:2rem;">Update names, classes, or upload photos for the Teachers in Charge and the House Council.</p>
             
-            <h3 style="color:var(--gold); margin-bottom:1rem; border-bottom:1px solid #333; padding-bottom:0.5rem;">Teachers</h3>
+            <h3 style="color:var(--gold); margin-bottom:1rem; border-bottom:1px solid #333; padding-bottom:0.5rem;">Teachers In Charge</h3>
             <div class="data-list" id="teachersProfileList" style="margin-top:0;"></div>
             
             <h3 style="color:var(--gold); margin-top:2rem; margin-bottom:1rem; border-bottom:1px solid #333; padding-bottom:0.5rem;">House Council</h3>
             <div class="data-list" id="councilProfileList" style="margin-top:0;"></div>
         </section>
 
-        <!-- 5. CLOUD SYNC -->
+        <!-- 5. DATA & EXPORT -->
         <section id="admin-export" class="admin-section">
             <div class="export-box">
                 <h2>Cloud Sync Active</h2>
                 <div style="background: rgba(0,255,0,0.1); padding: 1rem; border-left: 4px solid #2ecc71; text-align:left; margin-bottom:2rem; color: #e0e0e0;">
-                    <strong>SUCCESS:</strong> Your site is now connected to Firebase! Any changes you make in this dashboard are instantly saved to the database and automatically reflect on the live website. You no longer need to copy/paste code or download data.js manually.
+                    <strong>SUCCESS:</strong> Your site is now connected to Firebase! Any changes you make in this dashboard are instantly saved to the database and automatically reflect on the live website.
+                </div>
+                
+                <hr style="border-color: var(--border-color); margin: 2rem 0;">
+                
+                <h2 style="margin-bottom: 1rem;">Generate Reports (Excel)</h2>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" onclick="exportStudentPerformance()">Download Student Performance</button>
+                    <button class="btn" onclick="exportMembersList()">Download Members & Roles</button>
                 </div>
             </div>
         </section>
@@ -222,6 +229,25 @@
         <div class="crop-controls">
             <button id="cancelCropBtn" class="btn-secondary" style="background:#334; border:none; color:white;">Cancel</button>
             <button id="applyCropBtn" class="btn">Crop & Apply Photo</button>
+        </div>
+    </div>
+
+    <!-- EDIT PROFILE MODAL -->
+    <div id="edit-profile-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1001; align-items:center; justify-content:center;">
+        <div style="background:var(--bg-card); border:1px solid var(--gold); border-radius:15px; padding:2.5rem; width:90%; max-width:440px;">
+            <h3 style="color:var(--gold); margin-bottom:1.5rem;">Edit Profile</h3>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="edit-name" placeholder="e.g. Mr. John Smith">
+            </div>
+            <div class="form-group">
+                <label id="edit-class-label">Grade &amp; Section</label>
+                <input type="text" id="edit-class" placeholder="e.g. 12A or 10B">
+            </div>
+            <div style="display:flex; gap:1rem; margin-top:1rem;">
+                <button id="saveEditBtn" class="btn" style="flex:1;">Save Changes</button>
+                <button id="cancelEditBtn" class="btn-secondary" style="flex:1; background:transparent; color:var(--text-muted);">Cancel</button>
+            </div>
         </div>
     </div>
 
