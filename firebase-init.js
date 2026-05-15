@@ -1,30 +1,20 @@
-// Replace this config with your actual Firebase project configuration
-// 1. Go to Firebase Console (console.firebase.google.com)
-// 2. Create a new project or open an existing one
-// 3. Add a Web App to your project
-// 4. Copy the config object below
-// 5. IMPORTANT: In Firebase Console, go to "Realtime Database" and click "Create Database"
-// 6. Set the rules for Realtime Database to allow read/write (for testing only, or set up Auth later):
-//    {
-//      "rules": {
-//        ".read": true,
-//        ".write": true
-//      }
-//    }
+// Firebase v8 Compat — works with script tag CDN (no npm/bundler needed)
+// Project: leo-house-website (firebase.google.com)
+// Realtime Database rules must be set to allow read/write:
+//   { "rules": { ".read": true, ".write": true } }
 
 const firebaseConfig = {
-
-    apiKey: "AIzaSyBOrz9bOr7Os3201e-VP0_jWf086B4cdQs",
-    authDomain: "leo-house.firebaseapp.com",
-    databaseURL: "https://leo-house-default-rtdb.firebaseio.com",
-    projectId: "leo-house",
-    storageBucket: "leo-house.firebasestorage.app",
-    messagingSenderId: "1020954822712",
-    appId: "1:1020954822712:web:5ca735126b502d07e97ecd",
-    measurementId: "G-35WJDW9MBL"
+    apiKey: "AIzaSyAfUqwxWDfMvmFcncf5o0ku42fwei-5Mxc",
+    authDomain: "leo-house-website.firebaseapp.com",
+    databaseURL: "https://leo-house-website-default-rtdb.firebaseio.com",
+    projectId: "leo-house-website",
+    storageBucket: "leo-house-website.firebasestorage.app",
+    messagingSenderId: "410289174698",
+    appId: "1:410289174698:web:5962ac15fbd3d87cbd78d3",
+    measurementId: "G-3FQKS44PBN"
 };
 
-// Initialize Firebase
+// Initialize Firebase (v8 compat)
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
