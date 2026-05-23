@@ -164,9 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    let hasLoadedFromFirebase = false;
+
     // --- Firebase Data Sync ---
     const dbRef = db.ref('leo_data');
     dbRef.on('value', (snapshot) => {
+        hasLoadedFromFirebase = true;
         const data = snapshot.val();
         if (data) {
             LEO_DATA = data;
@@ -188,15 +191,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (needsSave) {
-                dbRef.set(LEO_DATA);
+                dbRef.set(LEO_DATA).catch(err => console.warn("Firebase write skipped (database not created yet):", err));
             }
             
             renderLists();
         } else {
-            dbRef.set(DEFAULT_LEO_DATA);
+            dbRef.set(DEFAULT_LEO_DATA).catch(err => console.warn("Firebase write skipped (database not created yet):", err));
+            renderLists();
+        }
+    }, (error) => {
+        console.error("Firebase read error:", error);
+        if (!hasLoadedFromFirebase) {
             renderLists();
         }
     });
+
+    // Timeout fallback if Firebase doesn't respond at all within 2 seconds
+    setTimeout(() => {
+        if (!hasLoadedFromFirebase) {
+            console.warn("Firebase connection timed out. Falling back to local data.");
+            renderLists();
+        }
+    }, 2000);
 
     // EXPOSE Globals for delete functions on onClick
     window.deleteItem = function(listName, index, isReversed = true) {

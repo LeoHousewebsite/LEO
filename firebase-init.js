@@ -15,7 +15,49 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (v8 compat)
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+let db;
+let usingFirebase = false;
+
+try {
+    if (typeof firebase !== 'undefined' && firebaseConfig.apiKey && firebaseConfig.databaseURL) {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.database();
+        usingFirebase = true;
+        console.log("Firebase Realtime Database initialized successfully.");
+    }
+} catch (err) {
+    console.warn("Firebase initialization failed. Falling back to local storage.", err);
 }
-const db = firebase.database();
+
+if (!usingFirebase) {
+    console.log("Running in LocalStorage fallback mode (no active Firebase database).");
+    
+    // Create a mock Firebase Database API using localStorage
+    db = {
+        ref: function(path) {
+            return {
+                on: function(event, callback, errorCallback) {
+                    if (event === 'value') {
+                        // Read from localStorage
+                        const data = localStorage.getItem(path);
+                        const parsedData = data ? JSON.parse(data) : null;
+                        
+                        // Simulate asynchronous database retrieval
+                        setTimeout(() => {
+                            callback({
+                                val: () => parsedData
+                            });
+                        }, 50);
+                    }
+                },
+                set: function(value) {
+                    localStorage.setItem(path, JSON.stringify(value));
+                    return Promise.resolve();
+                }
+            };
+        }
+    };
+}
+
