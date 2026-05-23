@@ -118,7 +118,9 @@
                 </div>
                 <div class="form-group">
                     <label>Class & Section</label>
-                    <input type="text" id="lbClass" placeholder="e.g. 10A" required>
+                    <select id="lbClass" required>
+                        <option value="">Select Class & Section</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Event Name</label>
@@ -167,8 +169,10 @@
                     <input type="text" id="memName" required>
                 </div>
                 <div class="form-group">
-                    <label>Grade / Class</label>
-                    <input type="text" id="memClass" placeholder="e.g. Grade 12" required>
+                    <label>Class & Section</label>
+                    <select id="memClass" required>
+                        <option value="">Select Class & Section</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Role</label>
@@ -242,7 +246,9 @@
             </div>
             <div class="form-group">
                 <label id="edit-class-label">Grade &amp; Section</label>
-                <input type="text" id="edit-class" placeholder="e.g. 12A or 10B">
+                <select id="edit-class">
+                    <option value="">Select Class & Section</option>
+                </select>
             </div>
             <div style="display:flex; gap:1rem; margin-top:1rem;">
                 <button id="saveEditBtn" class="btn" style="flex:1;">Save Changes</button>

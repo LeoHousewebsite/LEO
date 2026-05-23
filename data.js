@@ -71,38 +71,58 @@ var LEO_DATA = {
     "achievements": [],
     "studentsByClass": [
         {
-            "className": "Grade 12",
+            "className": "12A",
             "students": [
                 { "name": "Ryan Abraham", "role": "leo_council" },
+                { "name": "James Philip", "role": "class_rep" }
+            ]
+        },
+        {
+            "className": "12B",
+            "students": [
                 { "name": "Sarah Mathew", "role": "leo_council" },
-                { "name": "James Philip", "role": "class_rep" },
                 { "name": "Lena Varghese", "role": "member" }
             ]
         },
         {
-            "className": "Grade 11",
+            "className": "11A",
             "students": [
                 { "name": "Kevin Joseph", "role": "leo_council" },
+                { "name": "Omar Khalid", "role": "class_rep" }
+            ]
+        },
+        {
+            "className": "11B",
+            "students": [
                 { "name": "Ananya Pillai", "role": "leo_council" },
-                { "name": "Omar Khalid", "role": "class_rep" },
                 { "name": "Riya Sanjay", "role": "member" }
             ]
         },
         {
-            "className": "Grade 10",
+            "className": "10A",
             "students": [
                 { "name": "Daniel George", "role": "leo_council" },
+                { "name": "Farid Al-Amin", "role": "council" }
+            ]
+        },
+        {
+            "className": "10B",
+            "students": [
                 { "name": "Meera Rajan", "role": "leo_council" },
-                { "name": "Farid Al-Amin", "role": "council" },
                 { "name": "Leah Simon", "role": "member" }
             ]
         },
         {
-            "className": "Grade 9",
+            "className": "9A",
             "students": [
                 { "name": "Aidan Thomas", "role": "leo_council" },
+                { "name": "Chris Emmanuel", "role": "council" }
+            ]
+        },
+        {
+            "className": "9B",
+            "students": [
                 { "name": "Nadia Hassan", "role": "leo_council" },
-                { "name": "Chris Emmanuel", "role": "council" },
                 { "name": "Zara Biju", "role": "member" }
             ]
         }

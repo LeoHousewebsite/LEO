@@ -39,6 +39,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Generate Class Sections list: 12 A-J, 11 A-J, 10 A-J, 9 A-K
+    const classSections = [];
+    ['12', '11', '10'].forEach(grade => {
+        for (let charCode = 65; charCode <= 74; charCode++) { // A to J
+            classSections.push(grade + String.fromCharCode(charCode));
+        }
+    });
+    for (let charCode = 65; charCode <= 75; charCode++) { // A to K
+        classSections.push('9' + String.fromCharCode(charCode));
+    }
+
+    const lbClassSelect = document.getElementById('lbClass');
+    const memClassSelect = document.getElementById('memClass');
+    const editClassSelect = document.getElementById('edit-class');
+
+    const optionsHTML = classSections.map(cls => `<option value="${cls}">${cls}</option>`).join('');
+    
+    if (lbClassSelect) lbClassSelect.innerHTML += optionsHTML;
+    if (memClassSelect) memClassSelect.innerHTML += optionsHTML;
+    if (editClassSelect) editClassSelect.innerHTML += optionsHTML;
+
     // Tab Switching
     const tabs = document.querySelectorAll('.tab-btn');
     const sections = document.querySelectorAll('.admin-section');
