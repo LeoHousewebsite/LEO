@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(memberList) {
             let membersHTML = '';
             (LEO_DATA.studentsByClass || []).forEach((cls, classIndex) => {
+                if (!cls.students || cls.students.length === 0) return;
                 membersHTML += `<div style="padding-top:1rem; color:var(--gold); border-bottom:1px solid #333; font-weight:bold;">${cls.className}</div>`;
                 (cls.students || []).forEach((s, studentIndex) => {
                     membersHTML += `<div class="data-item">
@@ -266,7 +267,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.deleteMember = function(classIndex, studentIndex) {
         if(confirm('Are you sure you want to delete this member?')) {
-            LEO_DATA.studentsByClass[classIndex].students.splice(studentIndex, 1);
+            const cls = LEO_DATA.studentsByClass[classIndex];
+            if (cls && cls.students) {
+                cls.students.splice(studentIndex, 1);
+                if (cls.students.length === 0) {
+                    LEO_DATA.studentsByClass.splice(classIndex, 1);
+                }
+            }
             saveToFirebase();
         }
     };

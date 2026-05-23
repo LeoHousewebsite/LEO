@@ -170,10 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
             `).join('');
         }
 
-        // --- Populate Members ---
-        const membersContainer = document.getElementById('membersContainer');
         if (membersContainer && LEO_DATA.studentsByClass) {
-            membersContainer.innerHTML = LEO_DATA.studentsByClass.map(cls => `
+            membersContainer.innerHTML = LEO_DATA.studentsByClass
+                .filter(cls => cls.students && cls.students.length > 0)
+                .map(cls => `
                 <div class="class-group">
                     <h3>${cls.className}</h3>
                     <div class="student-grid">
