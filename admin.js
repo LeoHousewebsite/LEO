@@ -365,8 +365,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const event = document.getElementById('lbEvent').value;
         const points = parseInt(document.getElementById('lbPoints').value, 10);
 
+        const positionMap = { 4: '1st Place', 3: '2nd Place', 2: '3rd Place', 1: 'Participation' };
+        const position = positionMap[points] || '';
+
         if (!LEO_DATA.achievements) LEO_DATA.achievements = [];
-        LEO_DATA.achievements.push({ student, classSection, event, points });
+        LEO_DATA.achievements.push({ student, classSection, event, points, position });
         e.target.reset();
         saveToFirebase();
     });

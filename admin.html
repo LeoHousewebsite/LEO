@@ -128,7 +128,13 @@
                 </div>
                 <div class="form-group">
                     <label>Points Awarded</label>
-                    <input type="number" id="lbPoints" placeholder="e.g. 10" required>
+                    <select id="lbPoints" required>
+                        <option value="">Select Points</option>
+                        <option value="4">4 — 1st Place</option>
+                        <option value="3">3 — 2nd Place</option>
+                        <option value="2">2 — 3rd Place</option>
+                        <option value="1">1 — Participation</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn">Log Result</button>
             </form>
