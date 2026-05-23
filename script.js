@@ -89,9 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (leaderboardBody && achievementsList && LEO_DATA.achievements) {
             // Build student-to-class lookup map for backward compatibility
             const studentToClassMap = {};
-            if(LEO_DATA.studentsByClass) {
+            if (LEO_DATA.studentsByClass) {
                 LEO_DATA.studentsByClass.forEach(cls => {
-                    cls.students.forEach(s => {
+                    (cls.students || []).forEach(s => {
                         studentToClassMap[s.name] = cls.className;
                     });
                 });
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="class-group">
                     <h3>${cls.className}</h3>
                     <div class="student-grid">
-                        ${cls.students.map(s => `
+                        ${(cls.students || []).map(s => `
                             <div class="student-pill ${s.role}">
                                 ${s.name}
                             </div>

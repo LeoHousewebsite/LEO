@@ -388,9 +388,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const pointsMap = {};
         const studentToClassMap = {};
 
-        if(LEO_DATA.studentsByClass) {
+        if (LEO_DATA.studentsByClass) {
             LEO_DATA.studentsByClass.forEach(cls => {
-                cls.students.forEach(s => {
+                (cls.students || []).forEach(s => {
                     studentToClassMap[s.name] = cls.className;
                 });
             });
@@ -434,9 +434,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let csvContent = "data:text/csv;charset=utf-8,";
         csvContent += "Student Name,Class,Assigned Role\n";
 
-        LEO_DATA.studentsByClass.forEach(cls => {
-            cls.students.forEach(s => {
-                const roleFormatted = s.role.replace('_', ' ').toUpperCase();
+        (LEO_DATA.studentsByClass || []).forEach(cls => {
+            (cls.students || []).forEach(s => {
+                const roleFormatted = (s.role || '').replace('_', ' ').toUpperCase();
                 csvContent += `${s.name},${cls.className},${roleFormatted}\n`;
             });
         });
