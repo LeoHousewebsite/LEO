@@ -2,6 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Keep a copy of local data.js defaults
+    const DEFAULT_LEO_DATA = JSON.parse(JSON.stringify(LEO_DATA));
+
     // Login Logic
     const loginBtn = document.getElementById('loginBtn');
     const pwdInput = document.getElementById('adminPassword');
@@ -176,23 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Seed defaults if empty because Add/Delete are removed for these
             let needsSave = false;
             if (!LEO_DATA.teachers || LEO_DATA.teachers.length === 0) {
-                LEO_DATA.teachers = [
-                    { name: "Mr. Thomas Anderson", role: "House Master", class: "10A", img: "images/profile_teacher.png" },
-                    { name: "Ms. Sarah Jenkins", role: "House Mistress", class: "9B", img: "images/profile_teacher.png" }
-                ];
+                LEO_DATA.teachers = DEFAULT_LEO_DATA.teachers;
                 needsSave = true;
             }
             if (!LEO_DATA.council || LEO_DATA.council.length === 0) {
-                LEO_DATA.council = [
-                    { name: "Michael Chang", position: "President", grade: 12, img: "images/profile_male.png" },
-                    { name: "Sophia Martinez", position: "President", grade: 12, img: "images/profile_female.png" },
-                    { name: "Ethan Hunt", position: "Secretary", grade: 11, img: "images/profile_male.png" },
-                    { name: "Isabella Rossi", position: "Secretary", grade: 11, img: "images/profile_female.png" },
-                    { name: "Liam O'Connor", position: "Deputy Secretary", grade: 10, img: "images/profile_male.png" },
-                    { name: "Chloe Kim", position: "Deputy Secretary", grade: 10, img: "images/profile_female.png" },
-                    { name: "Noah Williams", position: "Council Member", grade: 9, img: "images/profile_male.png" },
-                    { name: "Emma Watson", position: "Council Member", grade: 9, img: "images/profile_female.png" }
-                ];
+                LEO_DATA.council = DEFAULT_LEO_DATA.council;
                 needsSave = true;
             }
 
@@ -202,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             renderLists();
         } else {
-            dbRef.set(LEO_DATA);
+            dbRef.set(DEFAULT_LEO_DATA);
             renderLists();
         }
     });

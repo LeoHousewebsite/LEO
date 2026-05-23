@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     
+    // Keep a copy of local data.js defaults
+    const DEFAULT_LEO_DATA = JSON.parse(JSON.stringify(LEO_DATA));
+
     // --- Navigation Logic ---
     const navLinks = document.querySelectorAll('.nav-links a');
     const sections = document.querySelectorAll('.section');
@@ -204,10 +207,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = snapshot.val();
         if (data) {
             LEO_DATA = data;
+            
+            // Seed individual default arrays if they are missing or empty in Firebase
+            let needsSave = false;
+            if (!LEO_DATA.teachers || LEO_DATA.teachers.length === 0) {
+                LEO_DATA.teachers = DEFAULT_LEO_DATA.teachers;
+                needsSave = true;
+            }
+            if (!LEO_DATA.council || LEO_DATA.council.length === 0) {
+                LEO_DATA.council = DEFAULT_LEO_DATA.council;
+                needsSave = true;
+            }
+            if (!LEO_DATA.studentsByClass || LEO_DATA.studentsByClass.length === 0) {
+                LEO_DATA.studentsByClass = DEFAULT_LEO_DATA.studentsByClass;
+                needsSave = true;
+            }
+            if (!LEO_DATA.news || LEO_DATA.news.length === 0) {
+                LEO_DATA.news = DEFAULT_LEO_DATA.news;
+                needsSave = true;
+            }
+            if (!LEO_DATA.achievements) {
+                LEO_DATA.achievements = [];
+                needsSave = true;
+            }
+            
+            if (needsSave) {
+                dbRef.set(LEO_DATA);
+            }
             renderPage();
         } else {
             // First time setup: push the default LEO_DATA to Firebase
-            dbRef.set(LEO_DATA);
+            dbRef.set(DEFAULT_LEO_DATA);
             renderPage();
         }
     });
