@@ -1,212 +1,116 @@
+// Default data — seeded to Firebase on first load if the database is empty.
+// All of this can be edited live via Admin Dashboard (admin.html)
+// → Home Profiles tab: edit teacher/council names, grades & photos
+// → Manage Members tab: add/remove house members
+// → Log Results tab: log event results for the leaderboard
 var LEO_DATA = {
     "teachers": [
         {
-            "name": "Mr. Thomas Anderson",
+            "name": "Mr. John Carter",
             "role": "House Master",
-            "class": "10A",
-            "phone": "+971 50 123 4567",
+            "class": "12A",
             "img": "images/profile_teacher.png"
         },
         {
-            "name": "Ms. Sarah Jenkins",
+            "name": "Ms. Priya Nair",
             "role": "House Mistress",
-            "class": "9B",
-            "phone": "+971 50 765 4321",
+            "class": "10B",
             "img": "images/profile_teacher.png"
         }
     ],
     "council": [
         {
-            "name": "Michael Chang",
+            "name": "Ryan Abraham",
             "position": "President",
-            "grade": 12,
-            "gender": "M",
+            "grade": "12A",
             "img": "images/profile_male.png"
         },
         {
-            "name": "Sophia Martinez",
+            "name": "Sarah Mathew",
             "position": "President",
-            "grade": 12,
-            "gender": "F",
+            "grade": "12B",
             "img": "images/profile_female.png"
         },
         {
-            "name": "Ethan Hunt",
+            "name": "Kevin Joseph",
             "position": "Secretary",
-            "grade": 11,
-            "gender": "M",
+            "grade": "11A",
             "img": "images/profile_male.png"
         },
         {
-            "name": "Isabella Rossi",
+            "name": "Ananya Pillai",
             "position": "Secretary",
-            "grade": 11,
-            "gender": "F",
+            "grade": "11B",
             "img": "images/profile_female.png"
         },
         {
-            "name": "Liam O'Connor",
+            "name": "Daniel George",
             "position": "Deputy Secretary",
-            "grade": 10,
-            "gender": "M",
+            "grade": "10A",
             "img": "images/profile_male.png"
         },
         {
-            "name": "Chloe Kim",
+            "name": "Meera Rajan",
             "position": "Deputy Secretary",
-            "grade": 10,
-            "gender": "F",
+            "grade": "10B",
             "img": "images/profile_female.png"
         },
         {
-            "name": "Noah Williams",
+            "name": "Aidan Thomas",
             "position": "Council Member",
-            "grade": 9,
-            "gender": "M",
+            "grade": "9A",
             "img": "images/profile_male.png"
         },
         {
-            "name": "Emma Watson",
+            "name": "Nadia Hassan",
             "position": "Council Member",
-            "grade": 9,
-            "gender": "F",
+            "grade": "9B",
             "img": "images/profile_female.png"
         }
     ],
-    "achievements": [
-        {
-            "student": "Michael Chang",
-            "event": "Interhouse Debate",
-            "position": "1st",
-            "points": 4
-        },
-        {
-            "student": "Chloe Kim",
-            "event": "100m Sprint",
-            "position": "2nd",
-            "points": 3
-        },
-        {
-            "student": "Ethan Hunt",
-            "event": "Science Fair",
-            "position": "3rd",
-            "points": 2
-        },
-        {
-            "student": "Emma Watson",
-            "event": "Art Competition",
-            "position": "Participation",
-            "points": 1
-        },
-        {
-            "student": "Sophia Martinez",
-            "event": "Math Olympiad",
-            "position": "1st",
-            "points": 4
-        },
-        {
-            "student": "Tom Holland",
-            "event": "Spelling Bee",
-            "position": "2nd",
-            "points": 3
-        },
-        {
-            "student": "Zendaya Coleman",
-            "event": "Debate",
-            "position": "Participation",
-            "points": 1
-        }
-    ],
+    "achievements": [],
     "studentsByClass": [
         {
             "className": "Grade 12",
             "students": [
-                {
-                    "name": "Michael Chang",
-                    "role": "leo_council"
-                },
-                {
-                    "name": "Sophia Martinez",
-                    "role": "leo_council"
-                },
-                {
-                    "name": "Daniel Craig",
-                    "role": "member"
-                },
-                {
-                    "name": "Halle Berry",
-                    "role": "council"
-                }
+                { "name": "Ryan Abraham", "role": "leo_council" },
+                { "name": "Sarah Mathew", "role": "leo_council" },
+                { "name": "James Philip", "role": "class_rep" },
+                { "name": "Lena Varghese", "role": "member" }
             ]
         },
         {
             "className": "Grade 11",
             "students": [
-                {
-                    "name": "Ethan Hunt",
-                    "role": "leo_council"
-                },
-                {
-                    "name": "Isabella Rossi",
-                    "role": "leo_council"
-                },
-                {
-                    "name": "Tom Cruise",
-                    "role": "member"
-                },
-                {
-                    "name": "Rebecca Ferguson",
-                    "role": "member"
-                }
+                { "name": "Kevin Joseph", "role": "leo_council" },
+                { "name": "Ananya Pillai", "role": "leo_council" },
+                { "name": "Omar Khalid", "role": "class_rep" },
+                { "name": "Riya Sanjay", "role": "member" }
             ]
         },
         {
             "className": "Grade 10",
             "students": [
-                {
-                    "name": "Liam O'Connor",
-                    "role": "leo_council"
-                },
-                {
-                    "name": "Chloe Kim",
-                    "role": "leo_council"
-                },
-                {
-                    "name": "Zendaya Coleman",
-                    "role": "council"
-                },
-                {
-                    "name": "Tom Holland",
-                    "role": "member"
-                }
+                { "name": "Daniel George", "role": "leo_council" },
+                { "name": "Meera Rajan", "role": "leo_council" },
+                { "name": "Farid Al-Amin", "role": "council" },
+                { "name": "Leah Simon", "role": "member" }
             ]
         },
         {
             "className": "Grade 9",
             "students": [
-                {
-                    "name": "Noah Williams",
-                    "role": "leo_council"
-                },
-                {
-                    "name": "Emma Watson",
-                    "role": "leo_council"
-                },
-                {
-                    "name": "Rupert Grint",
-                    "role": "member"
-                },
-                {
-                    "name": "Evanna Lynch",
-                    "role": "council"
-                }
+                { "name": "Aidan Thomas", "role": "leo_council" },
+                { "name": "Nadia Hassan", "role": "leo_council" },
+                { "name": "Chris Emmanuel", "role": "council" },
+                { "name": "Zara Biju", "role": "member" }
             ]
         }
     ],
     "news": [
         {
             "title": "Annual Sports Meet",
-            "date": "2026-05-15",
+            "date": "2026-05-20",
             "description": "Get ready to show courage, strength, and pride on the tracks. All members must be present!"
         },
         {
