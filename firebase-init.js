@@ -4,14 +4,14 @@
 //   { "rules": { ".read": true, ".write": true } }
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAfUqwxWDfMvmFcncf5o0ku42fwei-5Mxc",
-    authDomain: "leo-house-website.firebaseapp.com",
-    databaseURL: "https://leo-house-website-default-rtdb.firebaseio.com",
-    projectId: "leo-house-website",
-    storageBucket: "leo-house-website.firebasestorage.app",
-    messagingSenderId: "410289174698",
-    appId: "1:410289174698:web:5962ac15fbd3d87cbd78d3",
-    measurementId: "G-3FQKS44PBN"
+    apiKey: "AIzaSyCvRWFxu9amir1-TqTTvKoHv4IoP6Lb9AE",
+    authDomain: "leo-house-ba69a.firebaseapp.com",
+    databaseURL: "https://leo-house-ba69a-default-rtdb.firebaseio.com",
+    projectId: "leo-house-ba69a",
+    storageBucket: "leo-house-ba69a.firebasestorage.app",
+    messagingSenderId: "121853485056",
+    appId: "1:121853485056:web:4dd4ae0beb94648eec38e5",
+    measurementId: "G-DVWRT6Z0E0"
 };
 
 // Initialize Firebase (v8 compat)
