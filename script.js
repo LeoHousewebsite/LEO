@@ -171,20 +171,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (membersContainer && LEO_DATA.studentsByClass) {
-            membersContainer.innerHTML = LEO_DATA.studentsByClass
+            // Sort classes: grade 9 first → 12 last, then A→Z within each grade
+            const sortedClasses = [...LEO_DATA.studentsByClass]
                 .filter(cls => cls.students && cls.students.length > 0)
-                .map(cls => `
+                .sort((a, b) => {
+                    const nameA = a.className ? String(a.className) : '';
+                    const nameB = b.className ? String(b.className) : '';
+                    const gradeA = parseInt(nameA) || 0;
+                    const gradeB = parseInt(nameB) || 0;
+                    
+                    if (gradeA !== gradeB) {
+                        return gradeA - gradeB;
+                    }
+                    
+                    const secA = nameA.replace(/\d+/, '').trim();
+                    const secB = nameB.replace(/\d+/, '').trim();
+                    return secA.localeCompare(secB);
+                });
+
+            membersContainer.innerHTML = sortedClasses.map(cls => {
+                // Sort members alphabetically by name
+                const sortedStudents = [...(cls.students || [])].sort((a, b) => {
+                    const studentA = a.name ? String(a.name) : '';
+                    const studentB = b.name ? String(b.name) : '';
+                    return studentA.localeCompare(studentB);
+                });
+                return `
                 <div class="class-group">
                     <h3>${cls.className}</h3>
                     <div class="student-grid">
-                        ${(cls.students || []).map(s => `
+                        ${sortedStudents.map(s => `
                             <div class="student-pill ${s.role}">
                                 ${s.name}
                             </div>
                         `).join('')}
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
         // --- Populate News ---
