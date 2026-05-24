@@ -237,11 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
 
     // EXPOSE Globals for delete functions on onClick
-    window.deleteItem = function(listName, index, isReversed = true) {
+    window.deleteItem = function(listName, index) {
         const arr = LEO_DATA[listName];
-        const actualIndex = isReversed ? arr.length - 1 - index : index;
-        if(confirm('Are you sure you want to delete this?')) {
-            arr.splice(actualIndex, 1);
+        if (arr && confirm('Are you sure you want to delete this?')) {
+            arr.splice(index, 1);
             saveToFirebase();
         }
     };
