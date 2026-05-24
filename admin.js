@@ -104,23 +104,33 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderLists() {
         populateDropdown();
 
-        // Leaderboard List
+        // Leaderboard List — reverse a COPY first so onclick indices match what's displayed
         const lbList = document.getElementById('lbList');
-        if(lbList) lbList.innerHTML = (LEO_DATA.achievements || []).map((ach, i) => 
-            `<div class="data-item">
+        if(lbList) {
+            const achReversed = [...(LEO_DATA.achievements || [])].reverse();
+            const lastIdx = (LEO_DATA.achievements || []).length - 1;
+            lbList.innerHTML = achReversed.map((ach, i) => {
+                const realIndex = lastIdx - i;
+                return `<div class="data-item">
                 <div><b>${ach.student && ach.student !== "Class Point" ? ach.student : "Class: " + ach.classSection}</b> ${ach.classSection ? `(${ach.classSection})` : ''} - ${ach.event} <span class="gold-text">(+${ach.points} pts)</span></div>
-                <button class="btn-danger" onclick="deleteItem('achievements', ${i})">Delete</button>
-            </div>`
-        ).reverse().join('');
+                <button class="btn-danger" onclick="deleteItem('achievements', ${realIndex})">Delete</button>
+            </div>`;
+            }).join('');
+        }
 
-        // News List
+        // News List — reverse a COPY first so onclick indices match what's displayed
         const newsList = document.getElementById('newsList');
-        if(newsList) newsList.innerHTML = (LEO_DATA.news || []).map((n, i) => 
-            `<div class="data-item">
+        if(newsList) {
+            const newsReversed = [...(LEO_DATA.news || [])].reverse();
+            const lastNewsIdx = (LEO_DATA.news || []).length - 1;
+            newsList.innerHTML = newsReversed.map((n, i) => {
+                const realIndex = lastNewsIdx - i;
+                return `<div class="data-item">
                 <div><b>${n.title}</b> (${n.date}) ${n.img ? '<span style="color:#a0a5b1">[Has Photo]</span>' : ''}</div>
-                <button class="btn-danger" onclick="deleteItem('news', ${i})">Delete</button>
-            </div>`
-        ).reverse().join('');
+                <button class="btn-danger" onclick="deleteItem('news', ${realIndex})">Delete</button>
+            </div>`;
+            }).join('');
+        }
 
         // Member List (Flattened for display)
         const memberList = document.getElementById('memberList');
@@ -241,7 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const arr = LEO_DATA[listName];
         if (arr && confirm('Are you sure you want to delete this?')) {
             arr.splice(index, 1);
-            saveToFirebase();
+            renderLists();   // instant UI update
+            saveToFirebase(); // persist to Firebase
         }
     };
 
