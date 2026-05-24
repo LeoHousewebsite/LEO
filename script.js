@@ -30,6 +30,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- Navigation Mobile Toggle ---
+    const navToggle = document.getElementById('navToggle');
+    const navLinksList = document.getElementById('navLinks');
+    
+    if (navToggle && navLinksList) {
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinksList.classList.toggle('active');
+        });
+        
+        // Close menu when clicking a link
+        const links = navLinksList.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navLinksList.classList.remove('active');
+            });
+        });
+    }
+
     // --- Leaderboard Tabs Logic ---
     const lbTabs = document.querySelectorAll('.lb-tab-btn');
     const lbTables = document.querySelectorAll('.leaderboard-table');
