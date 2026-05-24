@@ -150,11 +150,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 .sort((a, b) => b.points - a.points);
 
             // Render Student Table
+            let currentRank = 1;
             leaderboardBody.innerHTML = sortedStudents.map((s, index) => {
-                const rankClass = index < 3 ? `rank-${index + 1}` : '';
+                if (index > 0 && s.points < sortedStudents[index - 1].points) {
+                    currentRank = index + 1;
+                }
+                const rankClass = currentRank <= 3 ? `rank-${currentRank}` : '';
                 return `
                     <tr>
-                        <td><span class="rank-badge ${rankClass}">${index + 1}</span></td>
+                        <td><span class="rank-badge ${rankClass}">${currentRank}</span></td>
                         <td style="font-weight: 600;">${s.name}</td>
                         <td class="gold-text"><b>${s.points}</b> pts</td>
                     </tr>
@@ -163,11 +167,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Render Class Table
             if(classLeaderboardBody) {
+                let currentClassRank = 1;
                 classLeaderboardBody.innerHTML = sortedClasses.map((c, index) => {
-                    const rankClass = index < 3 ? `rank-${index + 1}` : '';
+                    if (index > 0 && c.points < sortedClasses[index - 1].points) {
+                        currentClassRank = index + 1;
+                    }
+                    const rankClass = currentClassRank <= 3 ? `rank-${currentClassRank}` : '';
                     return `
                         <tr>
-                            <td><span class="rank-badge ${rankClass}">${index + 1}</span></td>
+                            <td><span class="rank-badge ${rankClass}">${currentClassRank}</span></td>
                             <td style="font-weight: 600;">${c.name}</td>
                             <td class="gold-text"><b>${c.points}</b> pts</td>
                         </tr>
