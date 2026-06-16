@@ -206,17 +206,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let hasLoadedFromFirebase = false;
 
     // Helper: Firebase stores arrays as objects {"0":{...},"1":{...}}.
-    // This normalizes them back into real JS arrays after every Firebase read.
+    // This normalizes them back into real JS arrays after every Firebase read
+    // and explicitly removes any `null` entries created by deletions.
     function normalizeArrays() {
-        if (!Array.isArray(LEO_DATA.achievements)) LEO_DATA.achievements = LEO_DATA.achievements ? Object.values(LEO_DATA.achievements) : [];
-        if (!Array.isArray(LEO_DATA.news))         LEO_DATA.news         = LEO_DATA.news         ? Object.values(LEO_DATA.news)         : [];
-        if (!Array.isArray(LEO_DATA.studentsByClass)) LEO_DATA.studentsByClass = LEO_DATA.studentsByClass ? Object.values(LEO_DATA.studentsByClass) : [];
-        if (!Array.isArray(LEO_DATA.teachers))     LEO_DATA.teachers     = LEO_DATA.teachers     ? Object.values(LEO_DATA.teachers)     : [];
-        if (!Array.isArray(LEO_DATA.council))      LEO_DATA.council      = LEO_DATA.council      ? Object.values(LEO_DATA.council)      : [];
+        const cleanArray = (val) => {
+            if (!val) return [];
+            const arr = Array.isArray(val) ? val : Object.values(val);
+            return arr.filter(item => item !== null && item !== undefined);
+        };
+
+        LEO_DATA.achievements = cleanArray(LEO_DATA.achievements);
+        LEO_DATA.news = cleanArray(LEO_DATA.news);
+        LEO_DATA.studentsByClass = cleanArray(LEO_DATA.studentsByClass);
+        LEO_DATA.teachers = cleanArray(LEO_DATA.teachers);
+        LEO_DATA.council = cleanArray(LEO_DATA.council);
+
         // Also normalize nested students arrays inside studentsByClass
-        (LEO_DATA.studentsByClass || []).forEach(cls => {
-            if (cls && !Array.isArray(cls.students)) {
-                cls.students = cls.students ? Object.values(cls.students) : [];
+        LEO_DATA.studentsByClass.forEach(cls => {
+            if (cls) {
+                cls.students = cleanArray(cls.students);
             }
         });
     }
