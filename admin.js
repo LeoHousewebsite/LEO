@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Refresh Lists visually & attach delete listeners
     function renderLists() {
+      try {
         populateDropdown();
 
         // Leaderboard List — reverse a COPY first so onclick indices match what's displayed
@@ -110,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const achReversed = [...(LEO_DATA.achievements || [])].reverse();
             const lastIdx = (LEO_DATA.achievements || []).length - 1;
             lbList.innerHTML = achReversed.map((ach, i) => {
+                if (!ach) return ''; // Skip null entries (Firebase deletes leave nulls)
                 const realIndex = lastIdx - i;
                 return `<div class="data-item">
                 <div><b>${ach.student && ach.student !== "Class Point" ? ach.student : "Class: " + ach.classSection}</b> ${ach.classSection ? `(${ach.classSection})` : ''} - ${ach.event} <span class="gold-text">(+${ach.points} pts)</span></div>
@@ -124,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const newsReversed = [...(LEO_DATA.news || [])].reverse();
             const lastNewsIdx = (LEO_DATA.news || []).length - 1;
             newsList.innerHTML = newsReversed.map((n, i) => {
+                if (!n) return ''; // Skip null entries (Firebase deletes leave nulls)
                 const realIndex = lastNewsIdx - i;
                 return `<div class="data-item">
                 <div><b>${n.title}</b> (${n.date}) ${n.img ? '<span style="color:#a0a5b1">[Has Photo]</span>' : ''}</div>
@@ -137,9 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if(memberList) {
             let membersHTML = '';
             (LEO_DATA.studentsByClass || []).forEach((cls, classIndex) => {
-                if (!cls.students || cls.students.length === 0) return;
+                if (!cls || !cls.students || cls.students.length === 0) return; // Skip null/empty entries
                 membersHTML += `<div style="padding-top:1rem; color:var(--gold); border-bottom:1px solid #333; font-weight:bold;">${cls.className}</div>`;
                 (cls.students || []).forEach((s, studentIndex) => {
+                    if (!s) return; // Skip null student entries
                     membersHTML += `<div class="data-item">
                         <div>
                             <span>${s.name}</span>
@@ -185,8 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const council = Array.isArray(LEO_DATA.council) ? LEO_DATA.council : Object.values(LEO_DATA.council || {});
             cList.innerHTML = council.map((c, i) => renderProfile(c, 'council', i)).join('');
         }
+      } catch(err) {
+          console.error('renderLists() error:', err);
+      }
     }
-    
+
     // Helper to save to Firebase
     function saveToFirebase() {
         db.ref('leo_data').set(LEO_DATA).then(() => {
