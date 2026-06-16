@@ -7,7 +7,7 @@ var LEO_DATA = {
     "teachers": [
         {
             "name": "Mr. John Carter",
-            "role": "House Master",
+            "role": "House Mistress",
             "class": "12A",
             "img": "images/profile_teacher.png"
         },
