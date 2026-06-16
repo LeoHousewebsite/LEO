@@ -218,21 +218,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
             membersContainer.innerHTML = sortedClasses.map(cls => {
-                // Sort members alphabetically by name
+                // Title case function
+                const toTitleCase = (str) => {
+                    if (!str) return '';
+                    return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                };
+                
+                // Role weights for sorting
+                const roleWeight = { 'class_rep': 1, 'leo_council': 2, 'council': 3, 'member': 4 };
+
+                // Sort members by role, then alphabetically by name
                 const sortedStudents = [...(cls.students || [])].sort((a, b) => {
+                    const weightA = roleWeight[a.role] || 4;
+                    const weightB = roleWeight[b.role] || 4;
+                    if (weightA !== weightB) {
+                        return weightA - weightB;
+                    }
                     const studentA = a.name ? String(a.name) : '';
                     const studentB = b.name ? String(b.name) : '';
                     return studentA.localeCompare(studentB);
                 });
+
                 return `
                 <div class="class-group">
                     <h3>${cls.className}</h3>
                     <div class="student-grid">
-                        ${sortedStudents.map(s => `
+                        ${sortedStudents.map(s => {
+                            const displayName = toTitleCase(s.name);
+                            return `
                             <div class="student-pill ${s.role}">
-                                ${s.name}
+                                ${displayName}
                             </div>
-                        `).join('')}
+                        `}).join('')}
                     </div>
                 </div>`;
             }).join('');

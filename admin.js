@@ -142,14 +142,31 @@ document.addEventListener('DOMContentLoaded', () => {
             (LEO_DATA.studentsByClass || []).forEach((cls, classIndex) => {
                 if (!cls || !cls.students || cls.students.length === 0) return; // Skip null/empty entries
                 membersHTML += `<div style="padding-top:1rem; color:var(--gold); border-bottom:1px solid #333; font-weight:bold;">${cls.className}</div>`;
-                (cls.students || []).forEach((s, studentIndex) => {
-                    if (!s) return; // Skip null student entries
+                const toTitleCase = (str) => {
+                    if (!str) return '';
+                    return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                };
+                const roleWeight = { 'class_rep': 1, 'leo_council': 2, 'council': 3, 'member': 4 };
+                
+                const sortedStudentsWithOriginalIndex = [...(cls.students || [])]
+                    .map((s, idx) => ({ s, idx }))
+                    .filter(item => item.s)
+                    .sort((a, b) => {
+                        const weightA = roleWeight[a.s.role] || 4;
+                        const weightB = roleWeight[b.s.role] || 4;
+                        if (weightA !== weightB) return weightA - weightB;
+                        const nameA = a.s.name ? String(a.s.name) : '';
+                        const nameB = b.s.name ? String(b.s.name) : '';
+                        return nameA.localeCompare(nameB);
+                    });
+
+                sortedStudentsWithOriginalIndex.forEach(({ s, idx }) => {
                     membersHTML += `<div class="data-item">
                         <div>
-                            <span>${s.name}</span>
+                            <span>${toTitleCase(s.name)}</span>
                             <span style="color:${s.role === 'leo_council' ? 'gold' : s.role==='council' ? 'white' : s.role==='class_rep' ? 'orange' : '#aaa'}; font-size:0.8rem; margin-left:1rem;">[${s.role.replace('_', ' ').toUpperCase()}]</span>
                         </div>
-                        <button class="btn-danger" onclick="deleteMember(${classIndex}, ${studentIndex})">Delete</button>
+                        <button class="btn-danger" onclick="deleteMember(${classIndex}, ${idx})">Delete</button>
                     </div>`;
                 });
             });
