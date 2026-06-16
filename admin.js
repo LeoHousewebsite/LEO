@@ -198,6 +198,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let hasLoadedFromFirebase = false;
 
+    // Helper: Firebase stores arrays as objects {"0":{...},"1":{...}}.
+    // This normalizes them back into real JS arrays after every Firebase read.
+    function normalizeArrays() {
+        if (!Array.isArray(LEO_DATA.achievements)) LEO_DATA.achievements = LEO_DATA.achievements ? Object.values(LEO_DATA.achievements) : [];
+        if (!Array.isArray(LEO_DATA.news))         LEO_DATA.news         = LEO_DATA.news         ? Object.values(LEO_DATA.news)         : [];
+        if (!Array.isArray(LEO_DATA.studentsByClass)) LEO_DATA.studentsByClass = LEO_DATA.studentsByClass ? Object.values(LEO_DATA.studentsByClass) : [];
+        if (!Array.isArray(LEO_DATA.teachers))     LEO_DATA.teachers     = LEO_DATA.teachers     ? Object.values(LEO_DATA.teachers)     : [];
+        if (!Array.isArray(LEO_DATA.council))      LEO_DATA.council      = LEO_DATA.council      ? Object.values(LEO_DATA.council)      : [];
+        // Also normalize nested students arrays inside studentsByClass
+        (LEO_DATA.studentsByClass || []).forEach(cls => {
+            if (cls && !Array.isArray(cls.students)) {
+                cls.students = cls.students ? Object.values(cls.students) : [];
+            }
+        });
+    }
+
     // --- Firebase Data Sync ---
     const dbRef = db.ref('leo_data');
     dbRef.on('value', (snapshot) => {
@@ -205,12 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = snapshot.val();
         if (data) {
             LEO_DATA = data;
-            
-            // Ensure arrays exist even if they were emptied in Firebase
-            if (!LEO_DATA.achievements) LEO_DATA.achievements = [];
-            if (!LEO_DATA.news) LEO_DATA.news = [];
-            if (!LEO_DATA.studentsByClass) LEO_DATA.studentsByClass = [];
-            
+
+            // Normalize all arrays (Firebase converts arrays to objects)
+            normalizeArrays();
+
             // Seed defaults if empty because Add/Delete are removed for these
             let needsSave = false;
             if (!LEO_DATA.teachers || LEO_DATA.teachers.length === 0) {
@@ -225,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (needsSave) {
                 dbRef.set(LEO_DATA).catch(err => console.warn("Firebase write skipped (database not created yet):", err));
             }
-            
+
             renderLists();
         } else {
             dbRef.set(DEFAULT_LEO_DATA).catch(err => console.warn("Firebase write skipped (database not created yet):", err));
@@ -270,7 +284,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const { type, index } = currentEditState;
         if (type === null) return;
 
+        // Ensure LEO_DATA[type] is a real array before indexing
+        if (!Array.isArray(LEO_DATA[type])) LEO_DATA[type] = Object.values(LEO_DATA[type] || {});
         const person = LEO_DATA[type][index];
+        if (!person) return;
+
         const isTeacher = type === 'teachers';
         const newName = document.getElementById('edit-name').value.trim();
         const newClass = document.getElementById('edit-class').value.trim();
@@ -281,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         editModal.style.display = 'none';
         saveToFirebase();
+        renderLists(); // Refresh the profile list immediately after edit
     });
 
     window.editProfile = function(type, index) {
@@ -318,6 +337,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const file = event.target.files[0];
         if(!file) return;
 
+        // Ensure the target array is a real array before we index into it
+        if (!Array.isArray(LEO_DATA[arrayType])) LEO_DATA[arrayType] = Object.values(LEO_DATA[arrayType] || {});
+
         cropperOptions.currentArrayType = arrayType;
         cropperOptions.currentIndex = index;
 
@@ -325,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.onload = function(e) {
             imageToCrop.src = e.target.result;
             cropModal.style.display = 'flex';
-            
+
             // Re-initialize cropper
             if (cropperOptions.cropperInstance) cropperOptions.cropperInstance.destroy();
             cropperOptions.cropperInstance = new Cropper(imageToCrop, {
